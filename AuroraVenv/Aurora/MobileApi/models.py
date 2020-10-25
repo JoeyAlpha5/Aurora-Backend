@@ -11,11 +11,15 @@ class Color(models.Model):
     colors_video = models.URLField(blank=False)
     post_date = models.DateField(auto_now_add=True)
 
+    objects = models.Manager()
+
 
 class Notification(models.Model):
     notification_title = models.CharField(max_length=50,blank=False)
     notification_message = models.CharField(max_length=150,blank=False)
     notification_user = models.ForeignKey(User,on_delete=models.CASCADE,blank=False)
+
+    objects = models.Manager()
 
 class UserAccount(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,blank=False)
@@ -25,6 +29,8 @@ class UserAccount(models.Model):
     user_city = models.CharField(max_length=150,blank=False)
     user_province = models.CharField(max_length=150,blank=False)
     user_country = models.CharField(max_length=150,blank=False)
+
+    objects = models.Manager()
     
 class Order(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,blank=False)
@@ -36,6 +42,8 @@ class Order(models.Model):
     order_placed = models.BooleanField()
     order_on_its_way = models.BooleanField()
     order_completed = models.BooleanField()
+
+    objects = models.Manager()
 
 #listen for when a new user has been created, if so execute the create_user_account function
 def create_user_account(sender, **kwargs):
