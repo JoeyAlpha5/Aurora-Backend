@@ -6,6 +6,10 @@ from .models import Color
 
 # Create your views here.
 def getFeed(request):
+    if 'search_term' in request.GET:
+        print('there is a search term')
+    else:
+        print('there is no search term')
     feed_count = int(request.GET['feed_count'])
     latest_colors_videos = Color.objects.all().order_by('-id')[feed_count:feed_count+5]
     # create feed object
