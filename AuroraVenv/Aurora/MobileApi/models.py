@@ -9,6 +9,7 @@ class Color(models.Model):
     colors_artist_photo = models.URLField(blank=False)
     colors_cover_photo = models.URLField(blank=False)
     colors_video = models.URLField(blank=False)
+    post_instagram_link = models.URLField(blank=True)
     post_date = models.DateField(auto_now_add=True)
 
     objects = models.Manager()

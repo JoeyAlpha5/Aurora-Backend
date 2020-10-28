@@ -4,7 +4,7 @@ from .models import Notification,Order,UserAccount,Color
 
 class UserAccountAdmin(admin.ModelAdmin):
     list_display = ['user','user_mobile']
-    ordering = ['user']
+    ordering = ['-user']
 
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ['notification_user','notification_title']
@@ -12,11 +12,11 @@ class NotificationAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['user','user_order_id','order_date','order_placed','order_on_its_way','order_completed']
-    ordering = ['order_date']
+    ordering = ['-order_date']
 
 class ColorsAdmin(admin.ModelAdmin):
     list_display = ['colors_artist_name','colors_song_title','post_date']
-    ordering = ['post_date']
+    ordering = ['-post_date']
 
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(Notification, NotificationAdmin)
