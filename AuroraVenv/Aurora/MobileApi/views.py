@@ -6,18 +6,30 @@ from .models import Color
 
 # Create your views here.
 def getFeed(request):
-    if 'search_term' in request.GET:
-        print('there is a search term')
-    else:
-        print('there is no search term')
     feed_count = int(request.GET['feed_count'])
-    latest_colors_videos = Color.objects.all().order_by('-id')[feed_count:feed_count+5]
-    # create feed object
     feed_array = []
-    for post in latest_colors_videos:
-        feed_array.append({"post_id":post.id,"instagram_link":post.post_instagram_link,'post_title':post.colors_song_title,"post_artist":post.colors_artist_name,"artist_photo":post.colors_artist_photo,"cover_poto":post.colors_cover_photo,"video_url":post.colors_video})
+    # if there's a search term get the search results
+    if 'search_term' in request.GET:
+        search_term = request.GET['search_term']
+        feed_array = getSearchPostArray(feed_count,search_term)
+    else:
+        latest_colors_videos = Color.objects.all().order_by('-id')[feed_count:feed_count+5]
+        for post in latest_colors_videos:
+            feed_array.append({"post_id":post.id,"instagram_link":post.post_instagram_link,'post_title':post.colors_song_title,"post_artist":post.colors_artist_name,"artist_photo":post.colors_artist_photo,"cover_poto":post.colors_cover_photo,"video_url":post.colors_video})
+
     return JsonResponse({"response":feed_array})
 
+
+# get search results
+def getSearchPostArray(feed_count,search_term):
+    colors_videos_array = []
+    colors_videos = Color.objects.filter(colors_artist_name__istartswith=search_term)[feed_count:feed_count+5]
+    if len(colors_videos) == 0:
+        colors_videos = Color.objects.filter(colors_song_title__istartswith=search_term)[feed_count:feed_count+5]
+    for video in colors_videos:
+        colors_videos_array.append({"post_id":video.id,"instagram_link":video.post_instagram_link,'post_title':video.colors_song_title,"post_artist":video.colors_artist_name,"artist_photo":video.colors_artist_photo,"cover_poto":video.colors_cover_photo,"video_url":video.colors_video})
+    return colors_videos_array
+    
 
 # if request has no parameters passed
 def emptyParams(request):
