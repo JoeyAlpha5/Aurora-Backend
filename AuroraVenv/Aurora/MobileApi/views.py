@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 import json
 from .models import Color
+from lyricsgenius import Genius
 
 # Create your views here.
 def getFeed(request):
@@ -30,6 +31,17 @@ def getSearchPostArray(feed_count,search_term):
         colors_videos_array.append({"post_id":video.id,"instagram_link":video.post_instagram_link,'post_title':video.colors_song_title,"post_artist":video.colors_artist_name,"artist_photo":video.colors_artist_photo,"cover_poto":video.colors_cover_photo,"video_url":video.colors_video})
     return colors_videos_array
     
+
+# get song lyrics and other required data
+def getLyrics(request):
+    song_title = request.GET['title']
+    artist_name = request.GET['artist']
+    genius = Genius('WriwiCbp2JoJJMWVY_J2f7o8aZZUChedm7wJLFl1lFvz15mKJqHORYa0gx8q0sG2')
+    song = genius.search_song(song_title, artist_name)
+
+    return JsonResponse({'cover_image':song._body['song_art_image_thumbnail_url'],'lyrics':str(song.lyrics),'title':song._body['title'],'date':song._body['release_date_for_display'],'artist':song._body['primary_artist']['name']})
+
+
 
 # if request has no parameters passed
 def emptyParams(request):
